@@ -1,0 +1,59 @@
+.dark-mode {
+  background-color: #212529;
+  color: #f8f9fa;
+}
+
+.dark-mode .table {
+  color: #f8f9fa;
+  --bs-table-bg: #343a40;
+}
+.dark-mode #product_data_Table td {
+  color: #ffffff;
+}
+
+.dark-mode .table thead th {
+  border-color: #495057;
+  color: #f8f9fa;
+}
+
+.dark-mode .table tbody td {
+  border-color: #495057;
+}
+
+.dark-mode .btn-secondary {
+  background-color: #495057;
+  border-color: #495057;
+  color: #f8f9fa;
+}
+
+.dark-mode .btn-secondary:hover {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.dark-mode .form-select {
+  background-color: #343a40;
+  color: #f8f9fa;
+  border-color: #495057;
+}
+
+.dark-mode .form-control {
+  background-color: #343a40;
+  color: #f8f9fa;
+  border-color: #495057;
+}
+
+.dark-mode .page-link {
+  background-color: #343a40;
+  color: #f8f9fa;
+  border-color: #495057;
+}
+
+.dark-mode .page-item.active .page-link {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: #fff;
+}
+
+
+
