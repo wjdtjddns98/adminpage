@@ -24,12 +24,9 @@ darkModeSwitch.addEventListener('change', () => {
   // 아이콘 표시/숨김
   moonIcon.style.display = newTheme === 'light' ? 'inline-block' : 'none';
   sunIcon.style.display = newTheme === 'dark' ? 'inline-block' : 'none';
-
-  // (선택 사항) 로컬 스토리지에 테마 저장
   localStorage.setItem('theme', newTheme);
 });
 
-// (선택 사항) 로컬 스토리지에서 테마 불러와 초기 적용
 const storedTheme = localStorage.getItem('theme');
 if (storedTheme) {
   body.setAttribute('data-bs-theme', storedTheme);
@@ -37,13 +34,13 @@ if (storedTheme) {
   moonIcon.style.display = storedTheme === 'light' ? 'inline-block' : 'none';
   sunIcon.style.display = storedTheme === 'dark' ? 'inline-block' : 'none';
 } else {
-  moonIcon.style.display = 'inline-block'; // 기본적으로 달 아이콘 표시
+  moonIcon.style.display = 'inline-block';
   sunIcon.style.display = 'none';
 }
 // 로그아웃 기능
 function logout() {
   alert("로그아웃 되었습니다.");
-  // 실제 로그아웃 로직 (예: 세션 삭제, 쿠키 삭제, 페이지 이동 등)은 여기에 구현해야 합니다.
+  // 실제 로그아웃 로직 들어갈공간
   window.location.href = 'index.html'; // 예시: 로그인 페이지로 이동
 }
 
@@ -53,7 +50,7 @@ const product_data = [
   { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
   { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
   { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
-  { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
+    { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
   { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
   { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
   { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
@@ -61,22 +58,27 @@ const product_data = [
   { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
   { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
   { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
-  { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
+    { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
   { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
   { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
   { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
-  { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
+    { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
+  { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
+  { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
+  { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
+    { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
   { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
   { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
   { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
 
 ];
 
-// 제품 테이블에 데이터 추가
+// 제품 테이블 관련 요소
 const product_data_Table = document.getElementById('product_data_Table');
 const paginationElement = document.getElementById('pagination');
-const itemsPerPage = 5; // 한 페이지에 표시할 아이템 수
+const itemsPerPage = 7; // 한 페이지에 표시할 아이템 수
 let currentPage = 1;
+let currentProductData = [...product_data];
 
 function displayProducts(data, page) {
   product_data_Table.innerHTML = ''; // 테이블 내용 초기화
@@ -93,10 +95,28 @@ function displayProducts(data, page) {
   });
 }
 
-// 페이지네이션 렌더링 함수 수정
+// 페이지네이션 렌더링
 function renderPagination(totalItems, itemsPerPage) {
   paginationElement.innerHTML = '';
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  // 이전 버튼
+  const prevItem = document.createElement('li');
+  prevItem.classList.add('page-item');
+  const prevLink = document.createElement('a');
+  prevLink.classList.add('page-link');
+  prevLink.textContent = '이전';
+  prevLink.href = '#';
+  prevLink.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (currentPage > 1) {
+      currentPage--;
+      displayProducts(currentProductData, currentPage);
+      updateActivePage();
+    }
+  });
+  prevItem.appendChild(prevLink);
+  paginationElement.appendChild(prevItem);
 
   for (let i = 1; i <= totalPages; i++) {
     const pageItem = document.createElement('li');
@@ -111,30 +131,12 @@ function renderPagination(totalItems, itemsPerPage) {
     pageLink.addEventListener('click', (event) => {
       event.preventDefault();
       currentPage = i;
-      displayProducts(product_data, currentPage);
-      updateActivePage(); // 활성 페이지 업데이트
+      displayProducts(currentProductData, currentPage);
+      updateActivePage();
     });
     pageItem.appendChild(pageLink);
     paginationElement.appendChild(pageItem);
   }
-
-  // 이전 버튼
-  const prevItem = document.createElement('li');
-  prevItem.classList.add('page-item');
-  const prevLink = document.createElement('a');
-  prevLink.classList.add('page-link');
-  prevLink.textContent = '이전';
-  prevLink.href = '#';
-  prevLink.addEventListener('click', (event) => {
-    event.preventDefault();
-    if (currentPage > 1) {
-      currentPage--;
-      displayProducts(product_data, currentPage);
-      updateActivePage();
-    }
-  });
-  prevItem.appendChild(prevLink);
-  paginationElement.prepend(prevItem);
 
   // 다음 버튼
   const nextItem = document.createElement('li');
@@ -148,7 +150,7 @@ function renderPagination(totalItems, itemsPerPage) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     if (currentPage < totalPages) {
       currentPage++;
-      displayProducts(product_data, currentPage);
+      displayProducts(currentProductData, currentPage);
       updateActivePage();
     }
   });
@@ -165,6 +167,43 @@ function updateActivePage() {
   }
 }
 
+// 검색 기능 구현
+const searchKeywordInput = document.getElementById('search_keyword');
+const searchButton = document.querySelector('.btn-secondary[type="button"]'); // "Serch" 버튼 선택
+const categorySelect = document.getElementById('category_data_table');
+
+function handleSearch() {
+  const keyword = searchKeywordInput.value.toLowerCase();
+  const selectedCategory = categorySelect.value;
+
+  const filteredProducts = product_data.filter(item => {
+    const productNameMatch = item.product.toLowerCase().includes(keyword);
+    const brandMatch = item.brand.toLowerCase().includes(keyword);
+    const categoryMatch = item.category.toLowerCase().includes(keyword);
+    const categoryFilterMatch = selectedCategory === '전체' || item.category === selectedCategory;
+
+    return categoryFilterMatch && (productNameMatch || brandMatch || categoryMatch);
+  });
+
+  currentProductData = filteredProducts; // 검색 결과로 현재 데이터 업데이트
+  currentPage = 1; // 검색 후 첫 페이지로 이동
+  displayProducts(currentProductData, currentPage);
+  renderPagination(currentProductData.length, itemsPerPage);
+}
+
+searchButton.addEventListener('click', handleSearch);
+
+// 엔터키 검색 기능 추가
+searchKeywordInput.addEventListener('keypress', (event) => {
+  if (event.key === 'Enter') {
+    event.preventDefault(); // 기본 Enter 동작 막기
+    handleSearch();
+  }
+});
+
 // 초기 데이터 로딩 및 페이지네이션 렌더링
-displayProducts(product_data, currentPage);
-renderPagination(product_data.length, itemsPerPage);
+displayProducts(currentProductData, currentPage);
+renderPagination(currentProductData.length, itemsPerPage);
+
+// 카테고리 선택 변경 시 검색 다시 수행
+categorySelect.addEventListener('change', handleSearch);
