@@ -51,3 +51,6 @@
 
   * **브라우저:** Chrome
   * **편집기:** PyCharm
+
+
+## [[Github로 배포]](https://wjdtjddns98.github.io/adminpage/)
