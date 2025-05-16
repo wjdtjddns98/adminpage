@@ -21,6 +21,11 @@ form.addEventListener("submit", function(e) { // event handler 익명함수
     return;
   }
 
+  if (userPw1.length < 6) {
+    alert("비밀번호는 6글자 이상이어야 합니다");
+    return;
+  }
+
   if (userPw1 !== userPw2) {
     alert("비밀번호가 일치하지 않습니다.");
     return;
@@ -37,3 +42,33 @@ form.addEventListener("submit", function(e) { // event handler 익명함수
     window.location.href = 'main.html';
   }
 });
+
+ const darkModeSwitch = document.getElementById('darkModeSwitch');
+    const body = document.body;
+
+    darkModeSwitch.addEventListener('change', () => {
+      if (darkModeSwitch.checked) {
+        body.setAttribute('data-bs-theme', 'dark');
+      } else {
+        body.setAttribute('data-bs-theme', 'light');
+      }
+    });
+
+    // (선택 사항) 로컬 스토리지에서 테마 설정을 불러와 초기 적용
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'dark') {
+      body.setAttribute('data-bs-theme', 'dark');
+      darkModeSwitch.checked = true;
+    } else {
+      body.setAttribute('data-bs-theme', 'light');
+      darkModeSwitch.checked = false;
+    }
+
+    // (선택 사항) 테마 변경 시 로컬 스토리지에 저장
+    darkModeSwitch.addEventListener('change', () => {
+      if (darkModeSwitch.checked) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });

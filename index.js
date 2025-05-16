@@ -12,26 +12,34 @@ function updateDateTime() {
 setInterval(updateDateTime, 1000); // 1초마다 업데이트
 
 // 다크 모드 기능
-const darkModeToggle = document.getElementById('darkModeToggle');
-const body = document.body;
-const isDarkMode = localStorage.getItem('darkMode') === 'enabled';
-const formSelects = document.querySelectorAll('.form-select');
-const formControls = document.querySelectorAll('.form-control');
+    const darkModeSwitch = document.getElementById('darkModeSwitch');
+    const body = document.body;
+    const moonIcon = document.querySelector('.bi-moon-stars-fill');
+    const sunIcon = document.querySelector('.bi-sun-fill');
 
-if (isDarkMode) {
-  body.classList.add('dark-mode');
-  formSelects.forEach(select => select.classList.add('dark-mode'));
-  formControls.forEach(control => control.classList.add('dark-mode'));
-}
+    darkModeSwitch.addEventListener('change', () => {
+      const newTheme = darkModeSwitch.checked ? 'dark' : 'light';
+      body.setAttribute('data-bs-theme', newTheme);
 
-darkModeToggle.addEventListener('click', () => {
-  body.classList.toggle('dark-mode');
-  formSelects.forEach(select => select.classList.toggle('dark-mode'));
-  formControls.forEach(control => control.classList.toggle('dark-mode'));
-  const isDarkModeEnabled = body.classList.contains('dark-mode');
-  localStorage.setItem('darkMode', isDarkModeEnabled ? 'enabled' : 'disabled');
-});
+      // 아이콘 표시/숨김
+      moonIcon.style.display = newTheme === 'light' ? 'inline-block' : 'none';
+      sunIcon.style.display = newTheme === 'dark' ? 'inline-block' : 'none';
 
+      // (선택 사항) 로컬 스토리지에 테마 저장
+      localStorage.setItem('theme', newTheme);
+    });
+
+    // (선택 사항) 로컬 스토리지에서 테마 불러와 초기 적용
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme) {
+      body.setAttribute('data-bs-theme', storedTheme);
+      darkModeSwitch.checked = storedTheme === 'dark';
+      moonIcon.style.display = storedTheme === 'light' ? 'inline-block' : 'none';
+      sunIcon.style.display = storedTheme === 'dark' ? 'inline-block' : 'none';
+    } else {
+      moonIcon.style.display = 'inline-block'; // 기본적으로 달 아이콘 표시
+      sunIcon.style.display = 'none';
+    }
 // 로그아웃 기능
 function logout() {
   alert("로그아웃 되었습니다.");
@@ -58,3 +66,5 @@ product_data.forEach((item) => {
   row.insertCell(2).innerHTML = item.product;
   row.insertCell(3).innerHTML = item.price;
 });
+
+
